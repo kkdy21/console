@@ -167,6 +167,7 @@ export class SpaceRouter {
             }
         });
         console.log('test1');
+        console.log('test2');
         return SpaceRouter.router;
     }
 }
