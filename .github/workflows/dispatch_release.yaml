@@ -234,10 +234,9 @@ jobs:
 
      - name: Merge to develop
        run: |
-            git fetch origin master
-            git fetch origin develop
-            git checkout develop
-            git merge origin/master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+            git checkout -t master
+            git checkout -t develop
+            git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
 
      - name: Push changes to develop
        run: |
