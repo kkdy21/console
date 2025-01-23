@@ -225,21 +225,24 @@ jobs:
      - name: Checkout
        uses: actions/checkout@v3
        with:
-        ref: master
+        fetch-depth: 0
 
      - name: Configure git
        run: |
          git config --global user.email "${{ vars.GIT_EMAIL }}"
          git config --global user.name "${{ vars.GIT_USERNAME }}"
 
-     - name: Merge to develop
+     - name: Fetch all branches
        run: |
-            git checkout -t origin/develop
-            git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+         git fetch origin +refs/heads/*:refs/remotes/origin/*
+         git branch -r
 
-     - name: Push changes to develop
+     - name: Merge master into develop
        run: |
-           git push origin develop
+          git checkout develop || git checkout -b develop origin/develop
+          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+          git push origin develop
+     
 
      - name: Notice when job fails
        if: failure()
