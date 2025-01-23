@@ -65,19 +65,19 @@ jobs:
           submodules: true
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Restore cached node_modules
-        id: restore-node-cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-modules-
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 16
+#
+#      - name: Restore cached node_modules
+#        id: restore-node-cache
+#        uses: actions/cache@v3
+#        with:
+#          path: '**/node_modules'
+#          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+#          restore-keys: |
+#            ${{ runner.OS }}-node-modules-
 
 #      - name: Install dependencies
 #        if: steps.restore-node-cache.outputs.cache-hit != 'true'
