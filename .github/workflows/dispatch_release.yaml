@@ -225,18 +225,37 @@ jobs:
      - name: Checkout
        uses: actions/checkout@v3
        with:
-        ref: develop
+        fetch-depth: 0
+        submodules: 'true'
 
      - name: Configure git
        run: |
          git config --global user.email "${{ vars.GIT_EMAIL }}"
          git config --global user.name "${{ vars.GIT_USERNAME }}"
          
+     # 3. master 브랜치 최신 상태 가져오기
+     - name: Fetch master branch
+       run: git fetch origin master:master
+
+     # 4. develop 브랜치 체크아웃
+     - name: Checkout develop branch
+       run: |
+         git fetch origin develop:develop
+         git checkout develop
+
+     # 5. master 병합
      - name: Merge master into develop
        run: |
-          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
-          git push origin develop
-     
+         git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+         git log --oneline --graph --all  # 병합 상태 디버깅
+
+     # 6. 변경 사항 푸시
+     - name: Push changes to develop
+       env:
+         TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+       run: |
+         git push https://x-access-token:${TOKEN}@github.com/<OWNER>/<REPOSITORY>.git develop
+
 
      - name: Notice when job fails
        if: failure()
