@@ -79,9 +79,9 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-node-modules-
 
-      - name: Install dependencies
-        if: steps.restore-node-cache.outputs.cache-hit != 'true'
-        run: npm ci
+#      - name: Install dependencies
+#        if: steps.restore-node-cache.outputs.cache-hit != 'true'
+#        run: npm ci
 
       - name: Change version
         run: |
@@ -151,23 +151,23 @@ jobs:
 #      - name: Login to Amazon ECR
 #        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REPO }}
 
-      - name: Build and push to dockerhub
-        uses: docker/build-push-action@v4
-        env:
-          BUILDKIT_COLORS: 1
-        with:
-          context: .
-          file: ./apps/web/Dockerfile
-          platforms: ${{ env.ARCH }}
-          push: true
-          cache-from: ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:latest
-          cache-to: type=inline
-          tags: |
-            ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:latest
-            ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:${{ env.VERSION }}
-#            ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:latest
-#            ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:${{ env.VERSION }}
-          provenance: false
+#      - name: Build and push to dockerhub
+#        uses: docker/build-push-action@v4
+#        env:
+#          BUILDKIT_COLORS: 1
+#        with:
+#          context: .
+#          file: ./apps/web/Dockerfile
+#          platforms: ${{ env.ARCH }}
+#          push: true
+#          cache-from: ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:latest
+#          cache-to: type=inline
+#          tags: |
+#            ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:latest
+#            ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:${{ env.VERSION }}
+##            ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:latest
+##            ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:${{ env.VERSION }}
+#          provenance: false
 
       - name: Notice when job fails
         if: failure()
@@ -235,7 +235,7 @@ jobs:
      - name: Merge to develop
        run: |
             git checkout develop
-            git merge --no-ff master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+            git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
 
      - name: Push changes to develop
        run: |
