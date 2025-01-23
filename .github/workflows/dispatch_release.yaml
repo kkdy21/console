@@ -234,8 +234,8 @@ jobs:
 
      - name: Merge to develop
        run: |
-            git checkout -t master
-            git checkout -t develop
+            git checkout -t origin/master
+            git checkout -t origin/develop
             git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
 
      - name: Push changes to develop
