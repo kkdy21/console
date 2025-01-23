@@ -22,7 +22,7 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
-#  mirinae:
+  mirinae:
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Invoke mirinae release workflow
