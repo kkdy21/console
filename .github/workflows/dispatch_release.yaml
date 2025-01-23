@@ -217,3 +217,36 @@ jobs:
           status: ${{job.status}}
           fields: repo,message,commit,author,action,ref,workflow,job
           author_name: Github Action Slack
+
+  merge_to_develop:
+   needs: tagging
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v3
+       with:
+        ref: master
+
+     - name: Configure git
+       run: |
+         git config --global user.email "${{ vars.GIT_EMAIL }}"
+         git config --global user.name "${{ vars.GIT_USERNAME }}"
+
+     - name: Merge to develop
+       run: |
+            git fetch origin develop
+            git checkout develop
+            git merge --no-ff master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+
+     - name: Push changes to develop
+       run: |
+           git push origin develop
+
+     - name: Notice when job fails
+       if: failure()
+       uses: 8398a7/action-slack@v3.15.0
+       with:
+         status: ${{job.status}}
+         fields: repo,workflow,job
+         author_name: Github Action Slack
+
