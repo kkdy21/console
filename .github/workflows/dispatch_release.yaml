@@ -234,7 +234,6 @@ jobs:
 
      - name: Merge to develop
        run: |
-            git fetch origin develop
             git checkout develop
             git merge --no-ff master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
 
