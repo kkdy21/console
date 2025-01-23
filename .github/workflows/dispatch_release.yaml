@@ -22,7 +22,7 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
-  mirinae:
+#  mirinae:
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Invoke mirinae release workflow
@@ -37,8 +37,8 @@ jobs:
 #          propagate_failure: true
 #          wait_interval: 5
 #          ref: ${{ github.ref_name }}
-
-  storybook:
+#
+#  storybook:
 #    runs-on: ubuntu-latest
 #    needs: mirinae
 #    steps:
@@ -55,7 +55,7 @@ jobs:
 
   versioning_and_docker:
     runs-on: ubuntu-latest
-    needs: mirinae
+#    needs: mirinae
     outputs:
       new_commit_sha: ${{ steps.get_sha.outputs.NEW_COMMIT_SHA }}
     steps:
