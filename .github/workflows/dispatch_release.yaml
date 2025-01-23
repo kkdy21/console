@@ -231,15 +231,15 @@ jobs:
        run: |
          git config --global user.email "${{ vars.GIT_EMAIL }}"
          git config --global user.name "${{ vars.GIT_USERNAME }}"
-
-     - name: Fetch all branches
+         
+         # 3. develop 브랜치 체크아웃 (없으면 생성)
+     - name: Checkout develop branch
        run: |
-         git fetch origin +refs/heads/*:refs/remotes/origin/*
-         git branch -r
+             git fetch origin develop:develop || git checkout -b develop origin/develop
+             git checkout develop
 
      - name: Merge master into develop
        run: |
-          git checkout develop || git checkout -b develop origin/develop
           git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
           git push origin develop
      
