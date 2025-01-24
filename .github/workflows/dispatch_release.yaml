@@ -155,12 +155,6 @@ jobs:
     version: ${{ env.VERSION }}
     secrets: inherit
 
-  Merge to Develop2:
-    uses: ${{ github.repository_owner }}/${{ github.event.repository.name }}/.github/workflows/dispatch_master_to_develop.yaml@master
-    with:
-    version: ${{ env.VERSION }}
-    secrets: inherit
-
   docker_and_AWS:
   needs: versioning_and_docker
   runs-on: ubuntu-latest
