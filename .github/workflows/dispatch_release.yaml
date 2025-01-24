@@ -227,6 +227,7 @@ jobs:
         with:
           ref: master
           fetch-depth: 0
+          fetch-tags: false
           submodules: true
           token: ${{ secrets.PAT_TOKEN }}
 
