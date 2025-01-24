@@ -231,7 +231,8 @@ jobs:
       - name: Configure git
         run: |
           ls
-          git log -n 10 --onelone
+          git log -n 10 --oneline
+          git branch
           git config --global user.email "${{ vars.GIT_EMAIL }}"
           git config --global user.name "${{ vars.GIT_USERNAME }}"
 
