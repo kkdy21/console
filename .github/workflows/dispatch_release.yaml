@@ -231,7 +231,8 @@ jobs:
 
       - name: Fetch develop branch
         run: |
-            git checkout -b develop origin/develop
+            git fetch origin develop:develop
+            git checkout develop
 
       - name: Configure git
         run: |
