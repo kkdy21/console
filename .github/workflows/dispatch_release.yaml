@@ -149,7 +149,7 @@ jobs:
           fields: repo,workflow,job
           author_name: Github Action Slack
 
-  Merge to Develop:
+  merge to Develop:
     uses: kkdy21/console/.github/workflows/dispatch_master_to_develop.yaml@master
     with:
       version: ${{ github.event.inputs.version }}
