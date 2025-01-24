@@ -1,4 +1,6 @@
 name: [dispatch] master_to_develop
+
+jobs:
   merge_to_develop:
    needs: versioning_and_docker
    runs-on: ubuntu-latest
