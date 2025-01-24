@@ -225,13 +225,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-            ref: master
-            submodules: true
-            token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
           ref: develop
           submodules: true
           token: ${{ secrets.PAT_TOKEN }}
@@ -242,8 +235,6 @@ jobs:
           git branch
           git config --global user.email "${{ vars.GIT_EMAIL }}"
           git config --global user.name "${{ vars.GIT_USERNAME }}"
-          git checkout develop
-          
 
       - name: Import GPG key
         id: import-gpg
@@ -256,7 +247,7 @@ jobs:
 
       - name: Merge master into develop
         run: |
-          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+          git merge origin/master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
 
       - name: Push changes to develop using GitHub push action
         uses: ad-m/github-push-action@v0.6.0
