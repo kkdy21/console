@@ -225,10 +225,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch_depth: 0
-          fetch_tag: false
+          ref: master
+          fetch-depth: 0
           submodules: true
           token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Fetch develop branch
+        run: |
+          git checkout -b develop origin/develop
 
       - name: Configure git
         run: |
@@ -263,4 +267,7 @@ jobs:
           status: ${{job.status}}
           fields: repo,workflow,job
           author_name: Github Action Slack
+
+
+
 
