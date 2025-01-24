@@ -150,6 +150,7 @@ jobs:
           author_name: Github Action Slack
 
   merge_to_Develop:
+    needs: versioning_and_docker
     uses: kkdy21/console/.github/workflows/dispatch_master_to_develop.yaml@master
     with:
       version: ${{ github.event.inputs.version }}
