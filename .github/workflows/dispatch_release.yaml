@@ -229,11 +229,12 @@ jobs:
             submodules: true
             token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Fetch develop branch
-        run: |
-            git remote show
-            git fetch origin develop:develop
-            git checkout develop
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: develop
+          submodules: true
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Configure git
         run: |
@@ -241,6 +242,8 @@ jobs:
           git branch
           git config --global user.email "${{ vars.GIT_EMAIL }}"
           git config --global user.name "${{ vars.GIT_USERNAME }}"
+          git checkout develop
+          
 
       - name: Import GPG key
         id: import-gpg
