@@ -2,11 +2,8 @@ name: "[Dispatch] Master to develop"
 
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch to trigger the workflow (Default: master)"
-        required: false
-        default: "master"
+    branches:
+      - master
 jobs:
   merge_to_develop:
    if: github.ref == 'refs/heads/master' # master 브랜치에서만 동작
