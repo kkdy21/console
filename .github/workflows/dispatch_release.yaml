@@ -139,7 +139,7 @@ jobs:
           branch: ${{ github.ref }}
 
       - name: Merge to Develop
-        uses: ./.github/workflows/master-to-develop.yaml
+        uses: ./.github/workflows/dispatch_master_to_develop.yaml
         with:
             version: ${{ env.VERSION }}
 
