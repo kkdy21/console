@@ -21,6 +21,8 @@ on:
         options:
           - master
           - develop
+        type: choice
+
 
 env:
   ARCH: ${{ github.event.inputs.container_arch }}
