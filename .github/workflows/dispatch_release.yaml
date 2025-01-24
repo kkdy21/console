@@ -252,7 +252,7 @@ jobs:
         run: |
           git checkout develop
           git merge master --no-edit
-          git push origin develop
+          git push origin develop --allow-unrelated-histories
 
 #      - name: Checkout develop branch
 #        run: |
