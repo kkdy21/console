@@ -251,8 +251,8 @@ jobs:
         if: env.CHANGES_DETECTED == 'true' # 차이가 있는 경우에만 실행
         run: |
           git checkout develop
-          git merge master --no-edit
-          git push origin develop --allow-unrelated-histories
+          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging" --allow-unrelated-histories
+          git push origin develop
 
 #      - name: Checkout develop branch
 #        run: |
