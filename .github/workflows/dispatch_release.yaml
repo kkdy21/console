@@ -232,7 +232,7 @@ jobs:
 
       - name: Fetch develop branch
         run: |
-            git fetch origin develop
+            git checkout -b develop origin/develop
 
       - name: Configure git
         run: |
@@ -241,19 +241,16 @@ jobs:
           git config --global user.email "${{ vars.GIT_EMAIL }}"
           git config --global user.name "${{ vars.GIT_USERNAME }}"
 
-      # 3. Compare master와 develop 브랜치
-      - name: Check difference between master and develop
-        id: diff-check
-        run: |
-          git diff --quiet origin/develop || echo "CHANGES_DETECTED=true" >> $GITHUB_ENV
-
       # 4. master를 develop에 병합
       - name: Merge master into develop
-        if: env.CHANGES_DETECTED == 'true' # 차이가 있는 경우에만 실행
         run: |
-          git checkout develop
-          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging" --allow-unrelated-histories
-          git push origin develop
+          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+
+      - name: Push changes to develop using GitHub push action
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          branch: develop
+          github_token: ${{ secrets.PAT_TOKEN }}
 
 #      - name: Checkout develop branch
 #        run: |
