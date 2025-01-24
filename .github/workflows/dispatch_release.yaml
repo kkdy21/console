@@ -139,15 +139,8 @@ jobs:
           branch: ${{ github.ref }}
 
       - name: Merge to Develop
-        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        uses: ./.github/workflows/master-to-develop.yaml
         with:
-            owner: ${{ github.repository_owner }}
-            repo: ${{ github.event.repository.name }}
-            github_token: ${{ secrets.PAT_TOKEN }}
-            workflow_file_name: dispatch_master_to_develop.yaml
-            wait_workflow: false
-            propagate_failure: false
-            ref: ${{ github.ref_name }}
             version: ${{ env.VERSION }}
 
             #  storybook:

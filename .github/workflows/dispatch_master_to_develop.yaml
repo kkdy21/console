@@ -14,7 +14,6 @@ env:
 
 jobs:
   merge_to_develop:
-   if: github.ref == 'refs/heads/master' # master 브랜치에서만 동작
    runs-on: ubuntu-latest
    steps:
      - name: Checkout
@@ -29,6 +28,8 @@ jobs:
      - name: 어디인가요?
        run: |
          git branch
+         echo "github.ref_name: ${{ github.ref_name }}"
+         echo "github.ref: ${{ github.ref }}"
 
      - name: Fetch develop branch
        run: |
