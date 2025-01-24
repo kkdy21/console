@@ -138,19 +138,11 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           branch: ${{ github.ref }}
 
-      - name: Trigger B workflow asynchronously
-        uses: actions/github-script@v6
+      - name: Merge to Develop
+        uses: ${{ github.repository_owner }}/${{ github.event.repository.name }}/.github/workflows/dispatch_master_to_develop.yaml/${{ github.ref_name }}
         with:
-            script: |
-             const res = await github.rest.actions.createWorkflowDispatch({
-                owner: ${{ github.repository_owner }},
-                repo: ${{ github.event.repository.name }},
-                workflow_id: "dispatch_master_to_develop.yaml",
-                ref: ${{ github.ref_name }},
-                inputs: {
-                  version: ${{ env.VERSION }}
-                }
-              });
+            version: ${{ env.VERSION }}
+            secrets: inherit
 
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
