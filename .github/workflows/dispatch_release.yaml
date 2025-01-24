@@ -2,6 +2,10 @@ name: "[Dispatch] Release"
 
 on:
   workflow_dispatch:
+    branches:
+        - develop
+        - master
+        - develop2
     inputs:
       version:
         description: 'enter version(x.y.z)'
@@ -14,14 +18,7 @@ on:
         options:
           - "linux/amd64"
           - "linux/amd64,linux/arm64"
-      branch:
-        required: true
-        default: 'develop'
-        description: 'Use workflow from'
-        options:
-          - master
-          - develop
-        type: choice
+
 
 
 env:
