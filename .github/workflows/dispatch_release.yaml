@@ -224,6 +224,7 @@ jobs:
     steps:
       - name: Configure git
         run: |
+          git log -n 10 --onelone
           git config --global user.email "${{ vars.GIT_EMAIL }}"
           git config --global user.name "${{ vars.GIT_USERNAME }}"
 
@@ -236,7 +237,7 @@ jobs:
         run: |
           git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
           git push origin develop
-          git log --oneline --graph --all  # 병합 상태 디버깅
+          git log --oneline --graph --all
 
       - name: Notice when job fails
         if: failure()
