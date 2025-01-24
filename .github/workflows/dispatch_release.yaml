@@ -225,27 +225,45 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+            ref: master
             submodules: true
             token: ${{ secrets.PAT_TOKEN }}
 
+      - name: Fetch develop branch
+        run: |
+            git fetch origin develop
+
       - name: Configure git
         run: |
-          ls
           git log -n 10 --oneline
           git branch
           git config --global user.email "${{ vars.GIT_EMAIL }}"
           git config --global user.name "${{ vars.GIT_USERNAME }}"
 
-      - name: Checkout develop branch
+      # 3. Compare master와 develop 브랜치
+      - name: Check difference between master and develop
+        id: diff-check
         run: |
-          git fetch origin develop:develop || git checkout -b develop origin/develop
-          git checkout develop
+          git diff --quiet origin/develop || echo "CHANGES_DETECTED=true" >> $GITHUB_ENV
 
+      # 4. master를 develop에 병합
       - name: Merge master into develop
+        if: env.CHANGES_DETECTED == 'true' # 차이가 있는 경우에만 실행
         run: |
-          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+          git checkout develop
+          git merge master --no-edit
           git push origin develop
-          git log --oneline --graph --all
+
+#      - name: Checkout develop branch
+#        run: |
+#          git fetch origin develop:develop || git checkout -b develop origin/develop
+#          git checkout develop
+#
+#      - name: Merge master into develop
+#        run: |
+#          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
+#          git push origin develop
+#          git log --oneline --graph --all
 
       - name: Notice when job fails
         if: failure()
