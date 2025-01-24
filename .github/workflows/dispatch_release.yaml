@@ -142,9 +142,6 @@ jobs:
         uses: ./.github/workflows/dispatch_master_to_develop.yaml
         with:
           version: ${{ env.VERSION }}
-        secrets: inherit
-
-
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 
