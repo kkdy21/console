@@ -225,14 +225,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-            ref: master
-            fetch-depth: 0
-            submodules: true
-            token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Fetch develop branch
-        run: |
-            git checkout -b develop origin/develop
+          fetch_depth: 0
+          fetch_tag: false
+          submodules: true
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Configure git
         run: |
@@ -259,17 +255,6 @@ jobs:
         with:
           branch: develop
           github_token: ${{ secrets.PAT_TOKEN }}
-
-#      - name: Checkout develop branch
-#        run: |
-#          git fetch origin develop:develop || git checkout -b develop origin/develop
-#          git checkout develop
-#
-#      - name: Merge master into develop
-#        run: |
-#          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
-#          git push origin develop
-#          git log --oneline --graph --all
 
       - name: Notice when job fails
         if: failure()
