@@ -225,7 +225,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: develop
           fetch_depth: 0
           fetch_tag: false
           submodules: true
