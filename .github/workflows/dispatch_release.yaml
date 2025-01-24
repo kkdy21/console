@@ -18,6 +18,9 @@ on:
         required: true
         default: 'develop'
         description: 'Use workflow from'
+        options:
+          - master
+          - develop
 
 env:
   ARCH: ${{ github.event.inputs.container_arch }}
