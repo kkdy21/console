@@ -16,9 +16,8 @@ on:
           - "linux/amd64,linux/arm64"
       branch:
         required: true
-        default: "develop"
+        default: 'develop'
         description: 'Use workflow from'
-
 
 env:
   ARCH: ${{ github.event.inputs.container_arch }}
