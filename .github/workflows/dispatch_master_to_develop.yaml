@@ -1,4 +1,4 @@
-name: [dispatch] master_to_develop
+name: "[dispatch] master_to_develop"
 
 jobs:
   merge_to_develop:
