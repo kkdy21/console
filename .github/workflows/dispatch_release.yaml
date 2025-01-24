@@ -152,7 +152,7 @@ jobs:
   Merge to Develop:
     uses: kkdy21/console/.github/workflows/dispatch_master_to_develop.yaml@master
     with:
-      version: ${{ env.VERSION }}
+      version: ${{ github.event.inputs.version }}
     secrets: inherit
 
   docker_and_AWS:
