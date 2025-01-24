@@ -219,9 +219,16 @@ jobs:
           author_name: Github Action Slack
 
   merge_to_develop:
-    needs: tagging
+    needs: versioning_and_docker
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            submodules: true
+            token: ${{ secrets.PAT_TOKEN }}
+        run: ls
+
       - name: Configure git
         run: |
           git log -n 10 --onelone
