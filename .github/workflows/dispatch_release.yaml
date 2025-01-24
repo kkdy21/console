@@ -86,6 +86,9 @@ jobs:
 #      - name: Install dependencies
 #        if: steps.restore-node-cache.outputs.cache-hit != 'true'
 #        run: npm ci
+      - name: 어디인가요?
+        run: |
+            git branch
 
       - name: Change version
         run: |

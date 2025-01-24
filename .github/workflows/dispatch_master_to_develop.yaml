@@ -20,6 +20,9 @@ jobs:
          fetch-tags: false
          submodules: true
          token: ${{ secrets.PAT_TOKEN }}
+     - name: 어디인가요?
+       run: |
+         git branch
 
      - name: Fetch develop branch
        run: |
