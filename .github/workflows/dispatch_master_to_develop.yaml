@@ -3,7 +3,7 @@ name: "[Dispatch] Master to develop"
 on:
   workflow_dispatch:
     branches:
-      - master
+      - develop
 jobs:
   merge_to_develop:
    if: github.ref == 'refs/heads/master' # master 브랜치에서만 동작
