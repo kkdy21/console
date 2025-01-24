@@ -88,6 +88,8 @@ jobs:
 #        run: npm ci
       - name: 어디인가요?
         run: |
+            pwd
+            ls
             git branch
             echo "github.ref_name: ${{ github.ref_name }}"
             echo "github.ref: ${{ github.ref }}"
@@ -139,7 +141,7 @@ jobs:
           branch: ${{ github.ref }}
 
       - name: Merge to Develop
-        uses: ./.github/workflows/dispatch_master_to_develop.yaml
+        uses: kkdy21/console/.github/workflows/dispatch_master_to_develop.yaml@master
         with:
           version: ${{ env.VERSION }}
 #      - name: Set up QEMU
