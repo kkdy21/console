@@ -2,11 +2,6 @@ name: "[Dispatch] Master to develop"
 
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        required: true
-        default: 'develop'
-        description: 'Use workflow from
 
 jobs:
   merge_to_develop:
