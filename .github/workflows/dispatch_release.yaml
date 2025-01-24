@@ -148,8 +148,7 @@ jobs:
             wait_workflow: false
             propagate_failure: false
             ref: ${{ github.ref_name }}
-            inputs: |
-              version: ${{ env.VERSION }}
+            version: ${{ env.VERSION }}
 
             #  storybook:
             #    runs-on: ubuntu-latest
