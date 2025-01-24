@@ -1,15 +1,15 @@
 name: "[Dispatch] Master to develop"
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       version:
         description: 'Version of the release (e.g., x.y.z)'
         required: true
-        default: '2.0.0'
+        default: '3.0.0'
 
 env:
-  VERSION: ${{ github.event.inputs.version }}
+  VERSION: ${{ inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
