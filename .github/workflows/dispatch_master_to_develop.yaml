@@ -6,7 +6,7 @@ on:
       branch:
         description: "Branch to trigger the workflow (Default: master)"
         required: false
-        default: "master"
+        default: "develop"
 jobs:
   merge_to_develop:
    if: github.ref == 'refs/heads/master' # master 브랜치에서만 동작
