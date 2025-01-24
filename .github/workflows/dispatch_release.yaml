@@ -2,6 +2,9 @@ name: "[Dispatch] Release"
 
 on:
   workflow_dispatch:
+    branches:
+        - develop
+        - master
     inputs:
       version:
         description: 'enter version(x.y.z)'
@@ -14,6 +17,7 @@ on:
         options:
           - "linux/amd64"
           - "linux/amd64,linux/arm64"
+
 
 
 env:
@@ -129,6 +133,32 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           branch: ${{ github.ref }}
 
+      - name: Merge to Develop
+        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+            owner: ${{ github.repository_owner }}
+            repo: ${{ github.event.repository.name }}
+            github_token: ${{ secrets.PAT_TOKEN }}
+            workflow_file_name: dispatch_master_to_develop.yaml
+            wait_workflow: false
+            propagate_failure: false
+            ref: ${{ github.ref_name }}
+
+            #  storybook:
+            #    runs-on: ubuntu-latest
+            #    needs: mirinae
+            #    steps:
+            #      - name: Invoke storybook release workflow
+            #        uses: convictional/trigger-workflow-and-wait@v1.6.1
+            #        with:
+            #          owner: ${{ github.repository_owner }}
+            #          repo: ${{ github.event.repository.name }}
+            #          github_token: ${{ secrets.PAT_TOKEN }}
+            #          workflow_file_name: dispatch_storybook_release.yaml
+            #          wait_workflow: false
+            #          propagate_failure: false
+            #          ref: ${{ github.ref_name }}
+
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 
@@ -217,58 +247,3 @@ jobs:
           status: ${{job.status}}
           fields: repo,message,commit,author,action,ref,workflow,job
           author_name: Github Action Slack
-
-  merge_to_develop:
-    needs: versioning_and_docker
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: master
-          fetch-depth: 0
-          fetch-tags: false
-          submodules: true
-          token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Fetch develop branch
-        run: |
-          git checkout -b develop origin/develop
-
-      - name: Configure git
-        run: |
-          git log -n 10 --oneline
-          git branch
-          git config --global user.email "${{ vars.GIT_EMAIL }}"
-          git config --global user.name "${{ vars.GIT_USERNAME }}"
-
-      - name: Import GPG key
-        id: import-gpg
-        uses: crazy-max/ghaction-import-gpg@v6.2.0
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
-
-      - name: Merge master into develop
-        run: |
-          git merge master -m "chore: merge master into develop after ${{ env.VERSION }} version tagging"
-
-      - name: Push changes to develop using GitHub push action
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          branch: develop
-          github_token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Notice when job fails
-        if: failure()
-        uses: 8398a7/action-slack@v3.15.0
-        with:
-          status: ${{job.status}}
-          fields: repo,workflow,job
-          author_name: Github Action Slack
-
-
-
-
