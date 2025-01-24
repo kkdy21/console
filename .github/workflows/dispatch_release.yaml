@@ -139,10 +139,11 @@ jobs:
           branch: ${{ github.ref }}
 
       - name: Merge to Develop
-        uses: ${{ github.repository_owner }}/${{ github.event.repository.name }}/.github/workflows/dispatch_master_to_develop.yaml/${{ github.ref_name }}
+        uses: ./.github/workflows/dispatch_master_to_develop.yaml
         with:
-            version: ${{ env.VERSION }}
-            secrets: inherit
+          version: ${{ env.VERSION }}
+        secrets: inherit
+
 
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
