@@ -231,6 +231,7 @@ jobs:
 
       - name: Fetch develop branch
         run: |
+            git remote show
             git fetch origin develop:develop
             git checkout develop
 
