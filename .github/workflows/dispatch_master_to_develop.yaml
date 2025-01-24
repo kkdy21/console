@@ -3,10 +3,15 @@ name: "[Dispatch] Master to develop"
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: "Branch to trigger the workflow (Default: master)"
-        required: false
-        default: "develop"
+      version:
+        description: 'Version of the release (e.g., x.y.z)'
+        required: true
+        default: '2.0.0'
+
+env:
+  VERSION: ${{ github.event.inputs.version }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 jobs:
   merge_to_develop:
    if: github.ref == 'refs/heads/master' # master 브랜치에서만 동작
