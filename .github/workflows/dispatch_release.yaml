@@ -146,7 +146,7 @@ jobs:
                repo: "${{ github.event.repository.name }}",
                event_type: "dispatch_master_to_develop",
                client_payload: {
-                 version: "${{ github.event.inputs.version }}"
+                 version: "${{ github.event.inputs.version }}",
                  branch: "${{env.REF_BRANCH}}"
                },
                headers: {
