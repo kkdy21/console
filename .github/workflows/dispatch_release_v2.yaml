@@ -129,7 +129,7 @@ jobs:
             const response = await github.rest.actions.createWorkflowDispatch({
               owner: kkdy21,
               repo: console,
-              workflow_id: "dispatch_master_to_develop2",
+              workflow_id: "dispatch_master_to_develop_v2",
               ref: "master",
               inputs: {
                 version: ${{ env.VERSION }}

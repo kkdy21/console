@@ -135,7 +135,7 @@ jobs:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
           github_token: ${{ secrets.PAT_TOKEN }}
-          workflow_file_name: dispatch_master_to_develop_v2.yaml
+          workflow_file_name: dispatch_master_to_develop.yaml
           wait_workflow: false
           propagate_failure: false
           ref: ${{ github.ref_name }}
