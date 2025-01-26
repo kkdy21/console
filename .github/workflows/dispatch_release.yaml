@@ -129,31 +129,19 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           branch: ${{ github.ref }}
 
-      - name: Merge to Develop
-        uses: convictional/trigger-workflow-and-wait@v1.6.1
+      - name: Trigger dispatch_master_to_develop workflow
+        uses: actions/github-script@v6
         with:
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          github_token: ${{ secrets.PAT_TOKEN }}
-          workflow_file_name: dispatch_master_to_develop.yaml
-          wait_workflow: false
-          propagate_failure: false
-          ref: ${{ github.ref_name }}
-          inputs: '{"version": "${{ github.event.inputs.version }}"}'
-
-#      - name: Trigger B workflow asynchronously
-#        uses: actions/github-script@v6
-#        with:
-#          script: |
-#            const response = await github.rest.actions.createWorkflowDispatch({
-#              owner: kkdy21,
-#              repo: console,
-#              workflow_id: "dispatch_master_to_develop_v2",
-#              ref: "master",
-#              inputs: {
-#                version: ${{ env.VERSION }}
-#              }
-#            });
+          script: |
+            github.rest.repos.createDispatchEvent({
+              owner: ${{ github.repository_owner }},
+              repo: ${{ github.event.repository.name }},
+              github_token: ${{ secrets.PAT_TOKEN }}
+              event_type: "dispatch_master_to_develop",
+              client_payload: {
+                version: "${{ github.event.inputs.version }}"
+              }
+            });
 
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
