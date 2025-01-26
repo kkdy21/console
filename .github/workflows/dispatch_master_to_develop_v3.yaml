@@ -6,7 +6,7 @@ on:
       - dispatch_master_to_develop_v3
 
 env:
-  VERSION: ${{ inputs.version }} || ${{ github.event.client_payload.version }}"
+  VERSION: ${{ inputs.version }} || ${{ github.event.client_payload.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
