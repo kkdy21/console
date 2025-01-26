@@ -3,7 +3,7 @@ name: "[Dispatch] Master to develop v3"
 on:
   repository_dispatch:
     types:
-      - dispatch_master_to_develop_v3
+      [dispatch_master_to_develop_v3]
 
 env:
   VERSION: ${{ inputs.version }} || ${{ github.event.client_payload.version }}
