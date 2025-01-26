@@ -133,16 +133,18 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-           await github.rest.repos.createDispatchEvent({
-              owner: ${{ github.repository_owner }},
-              repo: ${{ github.event.repository.name }},
-              event_type: 'dispatch_master_to_develop',
-              client_payload: {
-                version: "${{ github.event.inputs.version }}"
-              },
-              headers: {
-               authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
-              });
+            github.rest.repos.createDispatchEvent({
+               owner: "${{ github.repository_owner }}",
+               repo: "${{ github.event.repository.name }}",
+               event_type: "dispatch_master_to_develop",
+               client_payload: {
+                 version: "${{ github.event.inputs.version }}"
+               },
+               headers: {
+                 authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
+               }
+             });
+
 #               ref: 'develop',
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
