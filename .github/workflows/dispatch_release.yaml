@@ -20,6 +20,7 @@ env:
   ARCH: ${{ github.event.inputs.container_arch }}
   VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  REF_BRANCH: "master"
 
 jobs:
 #  mirinae:
@@ -146,8 +147,8 @@ jobs:
                event_type: "dispatch_master_to_develop",
                client_payload: {
                  version: "${{ github.event.inputs.version }}"
+                 branch: "${{env.REF_BRANCH}}"
                },
-               ref: 'master',
                headers: {
                  authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
                }
