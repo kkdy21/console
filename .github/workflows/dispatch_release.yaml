@@ -64,24 +64,31 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.PAT_TOKEN }}
+      - name: 어디인가요?
+        run: |
+          pwd
+          ls
+          git branch
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.ref: ${{ github.ref }}"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 16
+#
+#      - name: Restore cached node_modules
+#        id: restore-node-cache
+#        uses: actions/cache@v3
+#        with:
+#          path: '**/node_modules'
+#          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+#          restore-keys: |
+#            ${{ runner.OS }}-node-modules-
 
-      - name: Restore cached node_modules
-        id: restore-node-cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-modules-
-
-      - name: Install dependencies
-        if: steps.restore-node-cache.outputs.cache-hit != 'true'
-        run: npm ci
+#      - name: Install dependencies
+#        if: steps.restore-node-cache.outputs.cache-hit != 'true'
+#        run: npm ci
 
       - name: Change version
         run: |
@@ -140,6 +147,7 @@ jobs:
                client_payload: {
                  version: "${{ github.event.inputs.version }}"
                },
+               ref: 'master',
                headers: {
                  authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
                }
