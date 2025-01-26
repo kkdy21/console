@@ -134,16 +134,16 @@ jobs:
         with:
           script: |
            await github.rest.repos.createDispatchEvent({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              github_token: ${{ secrets.PAT_TOKEN }},
+              owner: ${{ github.repository_owner }},
+              repo: ${{ github.event.repository.name }},
               event_type: 'dispatch_master_to_develop',
-              ref: 'develop',
               client_payload: {
                 version: "${{ github.event.inputs.version }}"
               }
-            });
-
+              headers: {
+               authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
+              });
+#               ref: 'develop',
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 #
