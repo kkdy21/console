@@ -27,6 +27,7 @@ jobs:
           git branch
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "github.ref: ${{ github.ref }}"
+          echo "${{ env.version }}"
 
       - name: Fetch develop branch
         run: |
