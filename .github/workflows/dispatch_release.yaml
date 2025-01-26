@@ -139,7 +139,7 @@ jobs:
               event_type: 'dispatch_master_to_develop',
               client_payload: {
                 version: "${{ github.event.inputs.version }}"
-              }
+              },
               headers: {
                authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
               });
