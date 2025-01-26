@@ -135,7 +135,7 @@ jobs:
           script: |
            await github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
-              repo: ${{ github.event.repository.name }},
+              repo: context.repo.repo,
               github_token: ${{ secrets.PAT_TOKEN }},
               event_type: 'dispatch_master_to_develop',
               ref: 'develop',
