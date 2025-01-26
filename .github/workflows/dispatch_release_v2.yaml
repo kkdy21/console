@@ -1,7 +1,10 @@
-name: "[Dispatch] Release"
+name: "[Dispatch] Release V2"
 
 on:
   workflow_dispatch:
+    branches:
+      - develop
+      - master
     inputs:
       version:
         description: 'enter version(x.y.z)'
@@ -14,10 +17,7 @@ on:
         options:
           - "linux/amd64"
           - "linux/amd64,linux/arm64"
-      branch:
-        required: true
-        default: "develop"
-        description: 'Use workflow from'
+
 
 
 env:
@@ -69,30 +69,20 @@ jobs:
           submodules: true
           token: ${{ secrets.PAT_TOKEN }}
 
-      #      - name: Setup Node.js
-      #        uses: actions/setup-node@v3
-      #        with:
-      #          node-version: 16
-      #
-      #      - name: Restore cached node_modules
-      #        id: restore-node-cache
-      #        uses: actions/cache@v3
-      #        with:
-      #          path: '**/node_modules'
-      #          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      #          restore-keys: |
-      #            ${{ runner.OS }}-node-modules-
+      - name: 어디인가요?
+        run: |
+          pwd
+          ls
+          git branch
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.ref: ${{ github.ref }}"
 
-      #      - name: Install dependencies
-      #        if: steps.restore-node-cache.outputs.cache-hit != 'true'
-      #        run: npm ci
 
       - name: Change version
         run: |
           converted_version=$(echo ${{ env.VERSION }} | sed -E 's/^([0-9]+\.[0-9]+)\.([a-zA-Z]+)/\1.0-\2/')
           npm version $converted_version --no-git-tag-version --allow-same-version --no-commit-hooks --include-workspace-root -w=web
           echo "converted_version=$converted_version" >> "$GITHUB_OUTPUT"
-
       - name: Import GPG key
         id: import-gpg
         uses: crazy-max/ghaction-import-gpg@v6.2.0
@@ -132,19 +122,19 @@ jobs:
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           branch: ${{ github.ref }}
-
-      - name: Merge to Develop
-        uses: convictional/trigger-workflow-and-wait@v1.6.1
+      - name: Trigger B workflow asynchronously
+        uses: actions/github-script@v6
         with:
-            owner: ${{ github.repository_owner }}
-            repo: ${{ github.event.repository.name }}
-            github_token: ${{ secrets.PAT_TOKEN }}
-            workflow_file_name: dispatch_master_to_develop_v2.yaml
-            wait_workflow: false
-            propagate_failure: false
-            ref: ${{ github.ref_name }}
-            inputs: '{"version": "${{ github.event.inputs.version }}"}'
-
+          script: |
+            const response = await github.rest.actions.createWorkflowDispatch({
+              owner: kkdy21,
+              repo: console,
+              workflow_id: "dispatch_master_to_develop2",
+              ref: "master",
+              inputs: {
+                version: ${{ env.VERSION }}
+              }
+            });
       - name: Notice when job fails
         if: failure()
         uses: 8398a7/action-slack@v3.15.0
@@ -152,6 +142,25 @@ jobs:
           status: ${{job.status}}
           fields: repo,workflow,job
           author_name: Github Action Slack
+
+  merge_to_Develop:
+    needs: versioning_and_docker
+    uses: kkdy21/console/.github/workflows/dispatch_master_to_develop_v2.yaml@master
+    with:
+      version: ${{ github.event.inputs.version }}
+    secrets: inherit
+
+  docker_and_AWS:
+    needs: versioning_and_docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: 어디인가요?
+        run: |
+          pwd
+          ls
+          git branch
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.ref: ${{ github.ref }}"
 
   tagging:
     needs: versioning_and_docker
@@ -193,4 +202,3 @@ jobs:
           status: ${{job.status}}
           fields: repo,message,commit,author,action,ref,workflow,job
           author_name: Github Action Slack
-
