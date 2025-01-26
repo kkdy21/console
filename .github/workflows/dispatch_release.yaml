@@ -138,7 +138,7 @@ jobs:
               repo: ${{ github.event.repository.name }},
               github_token: ${{ secrets.PAT_TOKEN }},
               event_type: 'dispatch_master_to_develop',
-              ref: 'develop'
+              ref: 'develop',
               client_payload: {
                 version: "${{ github.event.inputs.version }}"
               }
