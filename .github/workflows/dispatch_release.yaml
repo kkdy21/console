@@ -140,6 +140,7 @@ jobs:
                client_payload: {
                  version: "${{ github.event.inputs.version }}"
                },
+               ref: 'develop',
                headers: {
                  authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
                }
