@@ -159,7 +159,7 @@ jobs:
             github.rest.repos.createDispatchEvent({
               owner: ${{ github.repository_owner }},
               repo: ${{ github.event.repository.name }},
-              github_token: ${{ secrets.PAT_TOKEN }}
+              github_token: ${{ secrets.PAT_TOKEN }},
               event_type: "dispatch_master_to_develop_v3",
               client_payload: {
                 version: "${{ github.event.inputs.version }}"

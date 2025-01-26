@@ -134,11 +134,11 @@ jobs:
         with:
           script: |
            await github.rest.repos.createDispatchEvent({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              github_token: ${{ secrets.PAT_TOKEN }}
+              owner: ${{ github.repository_owner }},
+              repo: ${{ github.event.repository.name }},
+              github_token: ${{ secrets.PAT_TOKEN }},
               event_type: 'dispatch_master_to_develop',
-              ref: 'master'
+              ref: 'develop'
               client_payload: {
                 version: "${{ github.event.inputs.version }}"
               }
