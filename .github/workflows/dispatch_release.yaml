@@ -1,4 +1,4 @@
-name: "[Dispatch] Release V3"
+name: "[Dispatch] Release"
 
 on:
   workflow_dispatch:
