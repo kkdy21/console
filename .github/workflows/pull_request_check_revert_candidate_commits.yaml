@@ -42,7 +42,7 @@ jobs:
             await github.rest.issues.createComment({
               ...context.repo,
               issue_number: prNumber,
-              body: "⚠️ The following commits require review:\n\n${commits}"   
+              body: `⚠️ The following commits require review:\n\n${commits}`   
             });
 
       - name: Comment no feat(backend) commits
@@ -53,5 +53,5 @@ jobs:
             await github.rest.issues.createComment({
               ...context.repo,
               issue_number: context.payload.pull_request.number,
-              body: "✅ There are no commits in this PR that require review."
+              body: `✅ There are no commits in this PR that require review.`
             });
