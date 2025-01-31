@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 전체 커밋 히스토리 가져오기
+          fetch-depth: 0
 
       - name: 어디인가요?
         run: |
@@ -29,18 +29,15 @@ jobs:
       - name: Get current and previous tags
         id: get-tags
         run: |
-          # 태그를 시간순으로 정렬하여 최신 두 개 추출
           tags=$(git tag --sort=-creatordate)
           current_tag=$(echo "$tags" | sed -n '1p')
           previous_tag=$(echo "$tags" | sed -n '2p')
           
-          # 태그가 없는 경우 예외 처리
           if [ -z "$current_tag" ]; then
             echo "No tags found."
             exit 1
           fi
           
-          # 환경 변수 및 출력 설정
           echo "current_tag=$current_tag" >> $GITHUB_ENV
           echo "previous_tag=$previous_tag" >> $GITHUB_ENV
           echo "current=$current_tag" >> $GITHUB_OUTPUT
@@ -53,15 +50,10 @@ jobs:
             echo "No previous tag found."
             echo "found=false" >> $GITHUB_OUTPUT
           else
-            # 'feat(backend'로 시작하는 커밋 메시지 검색
             commits=$(git log "$previous_tag..$current_tag" --oneline --grep='^feat(backend')
             if [ -n "$commits" ]; then
               echo "Found matching commits."
               echo "found=true" >> $GITHUB_OUTPUT
-              # 멀티라인 문자열 처리
-              commits="${commits//'%'/'%25'}"
-              commits="${commits//$'\n'/'%0A'}"
-              echo "commits=$commits" >> $GITHUB_OUTPUT
             else
               echo "No matching commits found."
               echo "found=false" >> $GITHUB_OUTPUT
