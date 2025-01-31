@@ -202,6 +202,7 @@ jobs:
             ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:latest
             ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:${{ env.VERSION }}
           provenance: false
+          
       - name: Notice when job fails
         if: failure()
         uses: 8398a7/action-slack@v3.15.0
