@@ -28,7 +28,6 @@ jobs:
           else
             echo "Found matching commits"
             echo "found=true" >> $GITHUB_OUTPUT
-
             COMMITS="${COMMITS//$'\n'/'%0A'}"
             echo "commits=$COMMITS" >> $GITHUB_OUTPUT
           fi
