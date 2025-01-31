@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 전체 커밋 히스토리 가져오기
+
       - name: 어디인가요?
         run: |
           pwd
@@ -17,13 +22,7 @@ jobs:
           git branch
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "github.ref: ${{ github.ref }}"
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # 전체 커밋 히스토리 가져오기
-
-
+          
       - name: Fetch tags
         run: git fetch --tags
 
