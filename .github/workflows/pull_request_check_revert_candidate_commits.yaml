@@ -1,4 +1,4 @@
-name: PR Commit Checker
+name: PR Check revert candidate commits
 
 on:
   pull_request:
@@ -9,17 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # 전체 커밋 히스토리 가져오기
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
 
       - name: Find feat(backend) commits
         id: check-commits
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # PR의 커밋 목록을 가져와서 필터링
           COMMITS=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits \
             --jq '.[] | select(.commit.message | test("^feat\\(backend")) | .sha + " " + .commit.message')
 
@@ -29,8 +28,6 @@ jobs:
           else
             echo "Found matching commits"
             echo "found=true" >> $GITHUB_OUTPUT
-
-            # 멀티라인 문자열 처리
             COMMITS="${COMMITS//$'\n'/'%0A'}"
             echo "commits=$COMMITS" >> $GITHUB_OUTPUT
           fi
@@ -45,7 +42,7 @@ jobs:
             await github.rest.issues.createComment({
               ...context.repo,
               issue_number: prNumber,
-              body: `⚠️ 다음 'feat(backend' 커밋들이 PR에 포함되어 있습니다:\n\n${commits}`
+              body: `⚠️ The following commits require review:\n\n${commits}`   
             });
 
       - name: Comment no feat(backend) commits
@@ -56,5 +53,5 @@ jobs:
             await github.rest.issues.createComment({
               ...context.repo,
               issue_number: context.payload.pull_request.number,
-              body: "✅ PR에 'feat(backend'로 시작하는 커밋이 없습니다."
+              body: `✅ There are no commits in this PR that require review.`
             });
