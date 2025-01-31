@@ -12,6 +12,7 @@ env:
   VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   REF_BRANCH: "master"
+  
 jobs:
   merge_to_develop:
     runs-on: ubuntu-latest

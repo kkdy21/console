@@ -156,7 +156,7 @@ jobs:
             github.rest.actions.createWorkflowDispatch({
                owner: "${{ github.repository_owner }}",
                repo: "${{ github.event.repository.name }}",
-               workflow_id: "dispatch_master_to_develop_v3.yaml",
+               workflow_id: "dispatch_master_to_develop.yaml",
                inputs: {
                  version: "${{ github.event.inputs.version }}",
                },
