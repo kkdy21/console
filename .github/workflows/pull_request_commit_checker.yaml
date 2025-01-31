@@ -16,21 +16,20 @@ jobs:
 
       - name: Find feat(backend) commits
         id: check-commits
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # PR의 헤드 커밋과 베이스 브랜치(master) 비교
-          BASE_SHA=${{ github.event.pull_request.base.sha }}
-          HEAD_SHA=${{ github.event.pull_request.head.sha }}
-          
-          # 커밋 메시지 검색
-          COMMITS=$(git log --oneline --grep='^feat(backend' $BASE_SHA..$HEAD_SHA)
-          
+          # PR의 커밋 목록을 가져와서 필터링
+          COMMITS=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits \
+            --jq '.[] | select(.commit.message | test("^feat\\(backend")) | .sha + " " + .commit.message')
+
           if [ -z "$COMMITS" ]; then
             echo "No matching commits found"
             echo "found=false" >> $GITHUB_OUTPUT
           else
             echo "Found matching commits"
             echo "found=true" >> $GITHUB_OUTPUT
-          
+
             # 멀티라인 문자열 처리
             COMMITS="${COMMITS//$'\n'/'%0A'}"
             echo "commits=$COMMITS" >> $GITHUB_OUTPUT
