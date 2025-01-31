@@ -1,4 +1,4 @@
-name: "[Dispatch] Master to develop"
+name: "[Dispatch] Master to develop V3"
 
 on:
   workflow_dispatch:
