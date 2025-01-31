@@ -9,7 +9,7 @@ on:
         default: '2.0.0'
 
 env:
-  VERSION: ${{ github.action.inputs.version }}
+  VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   branch: 'master'
 
@@ -31,7 +31,7 @@ jobs:
           git branch
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "github.ref: ${{ github.ref }}"
-          echo "${{ env.version }}"
+          echo "version : ${{ env.version }}"
 
       - name: Fetch develop branch
         run: |
