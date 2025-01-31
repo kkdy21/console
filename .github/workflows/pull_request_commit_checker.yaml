@@ -30,6 +30,10 @@ jobs:
           else
             echo "Found matching commits"
             echo "found=true" >> $GITHUB_OUTPUT
+          
+            # 멀티라인 문자열 처리
+            COMMITS="${COMMITS//$'\n'/'%0A'}"
+            echo "commits=$COMMITS" >> $GITHUB_OUTPUT
           fi
 
       - name: Comment feat(backend) commits
