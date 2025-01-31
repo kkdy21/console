@@ -1,13 +1,24 @@
-name: "[Dispatch] Master to develop v3"
+name: "[Dispatch] Master to develop"
 
 on:
-  repository_dispatch:
-    types:
-      [dispatch_master_to_develop_v3]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'enter version(x.y.z)'
+        required: true
+        default: '2.0.0'
+      branch:
+        type: choice
+        description: 'choose branch'
+        default: 'develop'
+        options:
+          - "develop"
+          - "master"
 
 env:
-  VERSION: ${{ inputs.version }} || ${{ github.event.client_payload.version }}
+  VERSION: ${{ github.action.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  branch: ${{ github.action.inputs.branch }}
 
 jobs:
   merge_to_develop:
@@ -16,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: master
+          ref: ${{env.branch}}
           fetch-depth: 0
           fetch-tags: false
           submodules: true
