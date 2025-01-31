@@ -42,6 +42,9 @@ jobs:
           echo "previous_tag=$previous_tag" >> $GITHUB_ENV
           echo "current=$current_tag" >> $GITHUB_OUTPUT
           echo "previous=$previous_tag" >> $GITHUB_OUTPUT
+          
+          echo "Current tag: $current_tag"
+          echo "Previous tag: $previous_tag"
 
       - name: Get commits between tags
         id: get-commits
