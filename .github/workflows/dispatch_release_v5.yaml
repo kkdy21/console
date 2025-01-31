@@ -1,4 +1,4 @@
-name: "[Dispatch] Release V3"
+name: "[Dispatch] Release V5"
 
 on:
   workflow_dispatch:
@@ -150,7 +150,6 @@ jobs:
       - name: Trigger dispatch_master_to_develop workflow
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
             github.rest.actions.createWorkflowDispatch({
                owner: "${{ github.repository_owner }}",

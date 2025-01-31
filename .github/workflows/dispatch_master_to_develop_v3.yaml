@@ -7,18 +7,11 @@ on:
         description: 'enter version(x.y.z)'
         required: true
         default: '2.0.0'
-      branch:
-        type: choice
-        description: 'choose branch'
-        default: 'develop'
-        options:
-          - "develop"
-          - "master"
 
 env:
   VERSION: ${{ github.action.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  branch: ${{ github.action.inputs.branch }}
+  branch: 'master'
 
 jobs:
   merge_to_develop:
