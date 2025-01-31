@@ -22,7 +22,7 @@ jobs:
           git branch
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "github.ref: ${{ github.ref }}"
-          
+
       - name: Fetch tags
         run: git fetch --tags
 
@@ -73,7 +73,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { github, context } = require('@actions/github');
             const prNumber = context.payload.pull_request.number;
             const commits = `${{ steps.get-commits.outputs.commits }}`.replace(/%0A/g, '\n');
             await github.rest.issues.createComment({
@@ -87,7 +86,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { github, context } = require('@actions/github');
             const prNumber = context.payload.pull_request.number;
             await github.rest.issues.createComment({
               ...context.repo,
