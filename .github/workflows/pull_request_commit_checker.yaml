@@ -2,8 +2,7 @@ name: PR Commit Checker
 
 on:
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   check-commits:
@@ -11,62 +10,51 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 전체 커밋 히스토리 가져오기
 
-      - name: Fetch tags
-        run: git fetch --tags
-
-      - name: Get current and previous tags
-        id: get-tags
+      - name: Find feat(backend) commits
+        id: check-commits
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          current_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
-          previous_tag=$(git describe --tags $(git rev-list --tags --skip=1 --max-count=1))
-          echo "current_tag=$current_tag" >> $GITHUB_ENV
-          echo "previous_tag=$previous_tag" >> $GITHUB_ENV
-          echo "::set-output name=current::$current_tag"
-          echo "::set-output name=previous::$previous_tag"
+          # PR의 커밋 목록을 가져와서 필터링
+          COMMITS=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits \
+            --jq '.[] | select(.commit.message | test("^feat\\(backend")) | .sha + " " + .commit.message')
 
-      - name: Get commits between tags
-        id: get-commits
-        run: |
-          if [ -z "$previous_tag" ]; then
-            echo "No previous tag found."
-            echo "::set-output name=found::false"
+          if [ -z "$COMMITS" ]; then
+            echo "No matching commits found"
+            echo "found=false" >> $GITHUB_OUTPUT
           else
-            commits=$(git log $previous_tag..$current_tag --oneline | grep '^feat(backend')
-            if [ -n "$commits" ]; then
-              echo "Found matching commits."
-              echo "::set-output name=found::true"
-              echo "::set-output name=commits::$commits"
-            else
-              echo "No matching commits found."
-              echo "::set-output name=found::false"
-            fi
+            echo "Found matching commits"
+            echo "found=true" >> $GITHUB_OUTPUT
+
+            # 멀티라인 문자열 처리
+            COMMITS="${COMMITS//$'\n'/'%0A'}"
+            echo "commits=$COMMITS" >> $GITHUB_OUTPUT
           fi
 
-      - name: Comment on PR
-        if: steps.get-commits.outputs.found == 'true'
+      - name: Comment feat(backend) commits
+        if: steps.check-commits.outputs.found == 'true'
         uses: actions/github-script@v6
         with:
           script: |
-            const { github, context } = require('@actions/github');
             const prNumber = context.payload.pull_request.number;
-            const commits = `${{ steps.get-commits.outputs.commits }}`;
+            const commits = `${{ steps.check-commits.outputs.commits }}`.replace(/%0A/g, '\n');
             await github.rest.issues.createComment({
               ...context.repo,
               issue_number: prNumber,
-              body: `Found the following commits with 'feat(backend':\n${commits}`
+              body: `⚠️ 다음 'feat(backend' 커밋들이 PR에 포함되어 있습니다:\n\n${commits}`
             });
 
-      - name: Comment no commits found
-        if: steps.get-commits.outputs.found == 'false'
+      - name: Comment no feat(backend) commits
+        if: steps.check-commits.outputs.found == 'false'
         uses: actions/github-script@v6
         with:
           script: |
-            const { github, context } = require('@actions/github');
-            const prNumber = context.payload.pull_request.number;
             await github.rest.issues.createComment({
               ...context.repo,
-              issue_number: prNumber,
-              body: "No commits with 'feat(backend' found between the latest two tags."
+              issue_number: context.payload.pull_request.number,
+              body: "✅ PR에 'feat(backend'로 시작하는 커밋이 없습니다."
             });
