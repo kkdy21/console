@@ -1,4 +1,4 @@
-name: "[Dispatch] Release"
+name: "[Dispatch] Release V3"
 
 on:
   workflow_dispatch:
@@ -28,8 +28,8 @@ jobs:
     steps:
       - name: Check branch with regex
         run: |
-          if [[ ! "${{ github.ref }}" =~ ^refs/heads/(master.*|.*master)$ ]]; then
-            echo "::error::Invalid branch pattern!"
+          if [[ ! "${{ github.ref }}" =~ ^refs/heads/(${{env.REF_BRANCH}}.*|.*${{env.REF_BRANCH}})$ ]]; then
+            echo `::error::Branch should always be run from '${{env.REF_BRANCH}}', Running branch: ${github.ref_name}`.
             exit 1
           fi
   #  mirinae:
@@ -66,7 +66,6 @@ jobs:
   versioning_and_docker:
     runs-on: ubuntu-latest
     needs: [check-branch]
-#    needs: [check-branch, mirinae]
     outputs:
       new_commit_sha: ${{ steps.get_sha.outputs.NEW_COMMIT_SHA }}
     steps:
@@ -76,13 +75,6 @@ jobs:
           submodules: true
           ref: ${{ env.REF_BRANCH }}
           token: ${{ secrets.PAT_TOKEN }}
-      - name: 어디인가요?
-        run: |
-          pwd
-          ls
-          git branch
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "github.ref: ${{ github.ref }}"
 
       #      - name: Setup Node.js
       #        uses: actions/setup-node@v3
@@ -151,21 +143,18 @@ jobs:
       - name: Trigger dispatch_master_to_develop workflow
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
-            github.rest.repos.createDispatchEvent({
+            github.rest.actions.createWorkflowDispatch({
                owner: "${{ github.repository_owner }}",
                repo: "${{ github.event.repository.name }}",
-               event_type: "dispatch_master_to_develop",
-               client_payload: {
+               workflow_id: "dispatch_master_to_develop_v3.yaml",
+               inputs: {
                  version: "${{ github.event.inputs.version }}",
-                 branch: "${{env.REF_BRANCH}}"
                },
-               headers: {
-                 authorization: `Bearer ${{ secrets.PAT_TOKEN }}`
-               }
+               ref: "${{env.REF_BRANCH}}",
              });
 
-      #               ref: 'develop',
       #      - name: Set up QEMU
       #        uses: docker/setup-qemu-action@v2
       #

@@ -1,15 +1,17 @@
-name: "[Dispatch] Master to develop"
+name: "[Dispatch] Master to develop V3"
 
 on:
-  repository_dispatch:
-    types:
-      [dispatch_master_to_develop]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'enter version(x.y.z)'
+        required: true
+        default: '2.0.0'
 
 env:
-  VERSION: ${{ github.event.client_payload.version }}
+  VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  branch: ${{ github.event.client_payload.branch }}
-
+  REF_BRANCH: "master"
 jobs:
   merge_to_develop:
     runs-on: ubuntu-latest
@@ -17,18 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{env.branch}}
+          ref: ${{env.REF_BRANCH}}
           fetch-depth: 0
           fetch-tags: false
           submodules: true
           token: ${{ secrets.PAT_TOKEN }}
-
-      - name: 어디인가요?
-        run: |
-          git branch
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "github.ref: ${{ github.ref }}"
-          echo "${{ env.version }}"
 
       - name: Fetch develop branch
         run: |
