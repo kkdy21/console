@@ -43,6 +43,7 @@ jobs:
 
   versioning_and_docker:
     runs-on: ubuntu-latest
+    need: check-branch
     outputs:
       new_commit_sha: ${{ steps.get_sha.outputs.NEW_COMMIT_SHA }}
     steps:
@@ -117,6 +118,11 @@ jobs:
 #          github_token: ${{ secrets.PAT_TOKEN }}
 #          branch: ${{ github.ref }}
 
+      - name: Set output
+        run: |
+            echo "owner: ${{ github.repository_owner }}"
+            echo "repo: ${{ github.event.repository.name }}"
+          
       - name: Trigger dispatch_master_to_develop.yaml workflow
         uses: actions/github-script@v6
         with:
