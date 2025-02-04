@@ -43,7 +43,7 @@ jobs:
 
   versioning_and_docker:
     runs-on: ubuntu-latest
-    need: check-branch
+    needs: check-branch
     outputs:
       new_commit_sha: ${{ steps.get_sha.outputs.NEW_COMMIT_SHA }}
     steps:
