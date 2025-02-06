@@ -415,6 +415,15 @@ const getAuthConfig = (config): AuthConfig => ({
     apiKey: config.get('DEV.AUTH.API_KEY'),
 });
 
+const loadMSWConfig = () => {
+    // const mode = `${import.meta.env.MODE}`;
+    // if (mode === 'development') {
+    import('@/mocks/browser').then(({ worker }) => {
+        worker.start();
+    });
+    // }
+};
+
 export const initApiClient = async (config) => {
     const userStore = useUserStore(pinia);
     const endpoints = getApiEndpoints(config);
@@ -425,6 +434,7 @@ export const initApiClient = async (config) => {
         mockConfig: getMockConfig(config),
         authConfig: getAuthConfig(config),
     };
+    loadMSWConfig(config);
     await SpaceConnector.init(
         endpoints,
         tokenApi,

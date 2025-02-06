@@ -108,6 +108,7 @@
     "dotenv": "^16.0.3",
     "eslint-config-custom": "*",
     "jsdom": "^20.0.1",
+    "msw": "^2.7.0",
     "postcss": "^8.4.31",
     "postcss-config-custom": "*",
     "rollup-plugin-visualizer": "^5.9.0",
@@ -125,5 +126,11 @@
   ],
   "type": "module",
   "license": "Apache-2.0",
-  "types": "dist/src/index.d.ts"
+  "types": "dist/src/index.d.ts",
+  "msw": {
+    "workerDirectory": [
+      "pulic",
+      "public"
+    ]
+  }
 }
