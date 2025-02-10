@@ -418,9 +418,15 @@ const getAuthConfig = (config): AuthConfig => ({
 const loadMSWConfig = () => {
     // const mode = `${import.meta.env.MODE}`;
     // if (mode === 'development') {
-    import('@/mocks/browser').then(({ worker }) => {
-        worker.start();
+
+    navigator.serviceWorker.getRegistrations().then((regs) => {
+        regs.forEach((reg) => reg.unregister());
+        import('@/mocks/browser').then(({ worker }) => {
+            console.log('service worker 시작');
+            worker.start({ serviceWorker: { url: '/mockServiceWorker.js' }, onUnhandledRequest: 'bypass', waitUntilReady: true });
+        });
     });
+
     // }
 };
 
@@ -434,7 +440,7 @@ export const initApiClient = async (config) => {
         mockConfig: getMockConfig(config),
         authConfig: getAuthConfig(config),
     };
-    loadMSWConfig(config);
+    loadMSWConfig();
     await SpaceConnector.init(
         endpoints,
         tokenApi,

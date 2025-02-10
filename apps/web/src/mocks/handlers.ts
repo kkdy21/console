@@ -1,15 +1,21 @@
-// import { http, HttpResponse } from 'msw';
+import type { HttpResponseResolver } from 'msw';
+import { http, delay } from 'msw';
+
+
+
+
+export function withDelay(resolver:HttpResponseResolver) : HttpResponseResolver {
+    return async (...args) => {
+        await delay(5000);
+        return resolver(...args);
+    };
+}
 
 export const handlers = [
-    // http.get('https://example.com/user', () =>
-    //     // ...and respond to them using this JSON response.
-    //     HttpResponse.json({
-    //         id: 'c7b3d8e0-5e0b-4b0f-8b3a-3b9f4b3d3b3d',
-    //         firstName: 'John',
-    //         lastName: 'Maverick',
-    //     })),
-    // //
-    // // http.get('/*', () => {
-    // //
-    // // }),
+    // http.get('*', withDelay(() => passthrough())),
+    http.get('*', async () => {
+        await delay(5000);
+    }),
+    // ...userHandlers,
 ];
+

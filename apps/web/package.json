@@ -126,11 +126,5 @@
   ],
   "type": "module",
   "license": "Apache-2.0",
-  "types": "dist/src/index.d.ts",
-  "msw": {
-    "workerDirectory": [
-      "pulic",
-      "public"
-    ]
-  }
+  "types": "dist/src/index.d.ts"
 }
